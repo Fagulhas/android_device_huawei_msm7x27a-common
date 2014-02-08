@@ -76,7 +76,6 @@ BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
 BOARD_EGL_CFG := device/huawei/msm7x27a-common/configs/egl.cfg
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 BOARD_USE_MHEAP_SCREENSHOT := true
-TARGET_DOESNT_USE_FENCE_SYNC := true
 TARGET_QCOM_DISPLAY_VARIANT := legacy
 USE_OPENGL_RENDERER := true
 
@@ -87,7 +86,7 @@ BOARD_HARDWARE_CLASS := device/huawei/msm7x27a-common/cmhw
 BOARD_KERNEL_BASE := 0x00200000
 BOARD_KERNEL_CMDLINE := androidboot.hardware=huawei androidboot.selinux=permissive
 BOARD_PAGE_SIZE := 2048
-TARGET_KERNEL_SOURCE := kernel/huawei/huawei-kernel-3.4
+TARGET_KERNEL_SOURCE := kernel/huawei/u8815
 
 # Lights
 TARGET_PROVIDES_LIBLIGHTS := true
