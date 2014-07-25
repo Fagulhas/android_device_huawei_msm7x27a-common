@@ -24,7 +24,6 @@ DEVICE_PACKAGE_OVERLAYS += device/huawei/msm7x27a-common/overlay
 PRODUCT_AAPT_CONFIG := normal hdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
 
-PRODUCT_TAGS += dalvik.gc.type-precise
 
 # Packages
 PRODUCT_PACKAGES += \
@@ -41,19 +40,14 @@ PRODUCT_PACKAGES += \
     libtilerenderer
 
 PRODUCT_PACKAGES += \
-    librs_jni \
-    LiveWallpapers \
-    LiveWallpapersPicker \
-    VisualizationWallpapers
-
-PRODUCT_PACKAGES += \
     libmm-omxcore \
     libOmxCore \
     libstagefrighthw
 
 PRODUCT_PACKAGES += \
+    lights.msm7x27a \
     gps.msm7x27a \
-    lights.msm7x27a
+    power.msm7x27a
 
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
@@ -86,6 +80,7 @@ PRODUCT_COPY_FILES += \
     device/huawei/msm7x27a-common/idc/qwerty2.idc:system/usr/idc/qwerty2.idc \
     device/huawei/msm7x27a-common/keychars/7x27a_kp.kcm:system/usr/keychars/7x27a_kp.kcm \
     device/huawei/msm7x27a-common/keylayout/7x27a_kp.kl:system/usr/keylayout/7x27a_kp.kl \
+    device/huawei/msm7x27a-common/keylayout/synaptics.kl:system/usr/keylayout/synaptics.kl \
     device/huawei/msm7x27a-common/keylayout/surf_keypad.kl:system/usr/keylayout/surf_keypad.kl
 
 # Permissions
@@ -101,9 +96,11 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
 # Properties
+# dexopt to /cache 	153
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.dexopt-data-only=0
 PRODUCT_PROPERTY_OVERRIDES += \
     headset.hook.delay=500
 
@@ -119,38 +116,32 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.composition.type=dyn \
-    debug.hwc.dynThreshold=1.9 \
+    debug.hwc.dynThreshold=1.91 \
     ro.bq.gpu_to_cpu_unsupported=1 \
     ro.max.fling_velocity=4000 \
     ro.opengles.version=131072 \
     ro.sf.lcd_density=240
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.heapgrowthlimit=32m \
-    dalvik.vm.heapsize=96m \
     ro.config.low_ram=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
-    dev.pm.dyn_sample_period=700000 \
-    dev.pm.dyn_samplingrate=1 \
     ro.vendor.extension_library=/system/lib/libqc-opt.so
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ril.subscription.types=NV,RUIM \
     rild.libargs=-d/dev/smd0 \
-    ro.telephony.call_ring.delay=3000 \
     ro.telephony.call_ring.multiple=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb \
-    ro.vold.umsdirtyratio=50
+    persist.sys.usb.config=mtp,adb
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.webview.provider=classic
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    wifi.interface=eth0 \
+    wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=60
 
 $(call inherit-product, vendor/huawei/msm7x27a-common/msm7x27a-common-vendor.mk)

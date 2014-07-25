@@ -2323,7 +2323,7 @@ index 0000000..6955d14
 +    /**
 +     * Load the content as if it was loaded by the provided base URL. The
 +     * historyUrl is used as the history entry for the load data.
-+     * 
++     *
 +     * @param baseUrl Base URL used to resolve relative paths in the content
 +     * @param data Content to render in the browser
 +     * @param mimeType Mimetype of the data being passed in
@@ -2339,7 +2339,7 @@ index 0000000..6955d14
 +        if (data == null) {
 +            data = "";
 +        }
-+        
++
 +        // Setup defaults for missing values. These defaults where taken from
 +        // WebKit's WebFrame.mm
 +        if (baseUrl == null || baseUrl.length() == 0) {
@@ -2437,7 +2437,7 @@ index 0000000..6955d14
 +            if (isMainFrame) {
 +                // Call onPageStarted for main frames.
 +                mCallbackProxy.onPageStarted(url, favicon);
-+                // as didFirstLayout() is only called for the main frame, reset 
++                // as didFirstLayout() is only called for the main frame, reset
 +                // mFirstLayoutDone only for the main frames
 +                mFirstLayoutDone = false;
 +                mCommitted = false;
@@ -2919,7 +2919,7 @@ index 0000000..6955d14
 +            sendMessageDelayed(obtainMessage(FRAME_COMPLETED), 100);
 +        }
 +        // FIXME: Need to figure out a better way to switch out of the history
-+        // drawing mode. Maybe we can somehow compare the history picture with 
++        // drawing mode. Maybe we can somehow compare the history picture with
 +        // the current picture, and switch when it contains more content.
 +        if (mFirstLayoutDone && newProgress > TRANSITION_SWITCH_THRESHOLD) {
 +            mCallbackProxy.switchOutDrawHistory();
@@ -3290,7 +3290,7 @@ index 0000000..6955d14
 +     * stringByEvaluatingJavaScriptFromString will execute the
 +     * JS passed in in the context of this browser frame.
 +     * @param script A javascript string to execute
-+     * 
++     *
 +     * @return string result of execution or null
 +     */
 +    public native String stringByEvaluatingJavaScriptFromString(String script);
@@ -5411,7 +5411,7 @@ index 13aa43f..154a290 100644
 +        if (WebViewFactory.getProvider().getClass().getName().contains("WebViewClassic")) {
 +            WebViewDatabase.getInstance(context);
 +        }
- 
+
          setGetInstanceIsAllowed();
          return getInstance();
 diff --git a/core/java/android/webkit/DebugFlags.java b/core/java/android/webkit/DebugFlags.java
@@ -5421,7 +5421,7 @@ index b5ca8c1..524f610 100644
 @@ -35,4 +35,22 @@
      public static final boolean URL_UTIL = false;
      public static final boolean WEB_SYNC_MANAGER = false;
- 
+
 +    // TODO: Delete these when WebViewClassic is moved
 +    public static final boolean BROWSER_FRAME = false;
 +    public static final boolean CACHE_MANAGER = false;
@@ -8630,7 +8630,7 @@ index 0000000..e6eaa14
 +    /**
 +     * Call native timer callbacks.
 +     */
-+    private void fireSharedTimer() { 
++    private void fireSharedTimer() {
 +        // clear the flag so that sharedTimerFired() can set a new timer
 +        mHasInstantTimer = false;
 +        sharedTimerFired();
@@ -8663,13 +8663,13 @@ index 0000000..e6eaa14
 +                break;
 +        }
 +    }
-+    
++
 +    // called from JNI side
 +    private void signalServiceFuncPtrQueue() {
 +        Message msg = obtainMessage(FUNCPTR_MESSAGE);
 +        sendMessage(msg);
 +    }
-+    
++
 +    private native void nativeServiceFuncPtrQueue();
 +
 +    /**
@@ -9702,7 +9702,7 @@ index 0000000..665cd9d
 +            return true;
 +        }
 +    }
-+    
++
 +    private final WebChromeClient.CustomViewCallback mCallback =
 +        new WebChromeClient.CustomViewCallback() {
 +            public void onCustomViewHidden() {
@@ -9766,7 +9766,7 @@ index 0000000..fe40156
 + * Class for managing the relationship between the {@link WebViewClassic} and installed
 + * plugins in the system. You can find this class through
 + * {@link PluginManager#getInstance}.
-+ * 
++ *
 + * @hide pending API solidification
 + */
 +public class PluginManager {
@@ -9829,7 +9829,7 @@ index 0000000..fe40156
 +     * Signal the WebCore thread to refresh its list of plugins. Use this if the
 +     * directory contents of one of the plugin directories has been modified and
 +     * needs its changes reflecting. May cause plugin load and/or unload.
-+     * 
++     *
 +     * @param reloadOpenPages Set to true to reload all open pages.
 +     */
 +    public void refreshPlugins(boolean reloadOpenPages) {
@@ -13065,7 +13065,7 @@ index 0000000..c10a429
 +    @Override
 +    public synchronized void setAppCachePath(String path) {
 +        // We test for a valid path and for repeated setting on the native
-+        // side, but we can avoid syncing in some simple cases. 
++        // side, but we can avoid syncing in some simple cases.
 +        if (mAppCachePath == null && path != null && !path.isEmpty()) {
 +            mAppCachePath = path;
 +            postSync();
@@ -19774,7 +19774,7 @@ index 0000000..3c377d3
 +        }
 +        return mWebViewPrivate.super_dispatchKeyEvent(event);
 +    }
-+    
++
 +    private static final int SNAP_BOUND = 16;
 +    private static int sChannelDistance = 16;
 +    private int mFirstTouchX = -1; // the first touched point
@@ -26638,7 +26638,7 @@ index b9131bf..cb08cd5 100644
 @@ -29,6 +29,12 @@
   */
  public final class WebViewFactory {
- 
+
 +    private static final String FORCE_PROVIDER_PROPERTY = "persist.webview.provider";
 +    private static final String FORCE_PROVIDER_PROPERTY_VALUE_CHROMIUM = "chromium";
 +    private static final String FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC = "classic";
@@ -26647,18 +26647,18 @@ index b9131bf..cb08cd5 100644
 +    private static final String DEFAULT_WEBVIEW_FACTORY = "android.webkit.WebViewClassic$Factory";
      private static final String CHROMIUM_WEBVIEW_FACTORY =
              "com.android.webview.chromium.WebViewChromiumFactoryProvider";
- 
+
 @@ -52,32 +58,33 @@
      private static WebViewFactoryProvider sProviderInstance;
      private static final Object sProviderLock = new Object();
- 
+
 -    public static boolean isExperimentalWebViewAvailable() {
 -        // TODO: Remove callers of this method then remove it.
 -        return false;  // Hide the toggle in Developer Settings.
 +    public static boolean isClassicWebViewAvailable() {
 +        return true;
      }
- 
+
      /** @hide */
 -    public static void setUseExperimentalWebView(boolean enable) {
 -        // TODO: Remove callers of this method then remove it.
@@ -26667,7 +26667,7 @@ index b9131bf..cb08cd5 100644
 +        Log.i(LOGTAG, "Use Classic WebView changed: "
 +                + SystemProperties.get(WebViewFactory.FORCE_PROVIDER_PROPERTY, ""));
      }
- 
+
      /** @hide */
 -    public static boolean useExperimentalWebView() {
 -        // TODO: Remove callers of this method then remove it.
@@ -26676,7 +26676,7 @@ index b9131bf..cb08cd5 100644
 +        return (SystemProperties.get(FORCE_PROVIDER_PROPERTY,
 +             "") == FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC);
      }
- 
+
      /** @hide */
 -    public static boolean isUseExperimentalWebViewSet() {
 -        // TODO: Remove callers of this method then remove it.
@@ -26685,19 +26685,19 @@ index b9131bf..cb08cd5 100644
 +        return (SystemProperties.get(FORCE_PROVIDER_PROPERTY,
 +             "") == FORCE_PROVIDER_PROPERTY_VALUE_CLASSIC);
      }
- 
+
      static WebViewFactoryProvider getProvider() {
          synchronized (sProviderLock) {
              // For now the main purpose of this function (and the factory abstraction) is to keep
 -            // us honest and minimize usage of WebView internals when binding the proxy.
 +            // us honest and minimize usage of WebViewClassic internals when binding the proxy.
              if (sProviderInstance != null) return sProviderInstance;
- 
+
              Class<WebViewFactoryProvider> providerClass;
 @@ -111,7 +118,25 @@ static WebViewFactoryProvider getProvider() {
          }
      }
- 
+
 +    // We allow a system property to specify that we should use the classic Chromium powered
 +    // WebView. This enables us to switch between implementations at runtime.
 +    private static boolean isClassicWebViewEnabled() {
@@ -28532,7 +28532,7 @@ index 0000000..1d864e5
 +    // the current computed zoom scale and its inverse.
 +    private float mActualScale;
 +    private float mInvActualScale;
-+    
++
 +    /*
 +     * The initial scale for the WebView. 0 means default. If initial scale is
 +     * greater than 0, the WebView starts with this value as its initial scale.
@@ -28564,7 +28564,7 @@ index 0000000..1d864e5
 +
 +    // whether support multi-touch
 +    private boolean mSupportMultiTouch;
-+    
++
 +    /**
 +     * True if we have a touch panel capable of detecting smooth pan/scale at the same time
 +     */
@@ -28776,7 +28776,7 @@ index 0000000..1d864e5
 +        mZoomCenterY = mWebView.getViewHeight() * .5f;
 +        mAnchorX = mWebView.viewToContentX((int) mZoomCenterX + mWebView.getScrollX());
 +        mAnchorY = mWebView.viewToContentY((int) mZoomCenterY + mWebView.getScrollY());
-+        return startZoomAnimation(mActualScale * zoomMultiplier, 
++        return startZoomAnimation(mActualScale * zoomMultiplier,
 +            !mWebView.getSettings().getUseFixedViewport());
 +    }
 +
@@ -28822,7 +28822,7 @@ index 0000000..1d864e5
 +     *
 +     * A fixed length animation begins when startZoomAnimation(...) is called and
 +     * continues until the ZOOM_ANIMATION_LENGTH time has elapsed. During that
-+     * interval each time the WebView draws it calls this function which is 
++     * interval each time the WebView draws it calls this function which is
 +     * responsible for generating the animation.
 +     *
 +     * Additionally, the WebView can check to see if such an animation is currently
@@ -29065,7 +29065,7 @@ index 0000000..1d864e5
 +        if (scrollY < mWebView.getTitleHeight()) {
 +            mWebView.updateScrollCoordinates(mWebView.getScrollX(), 0);
 +        }
-+        startZoomAnimation(getZoomOverviewScale(), 
++        startZoomAnimation(getZoomOverviewScale(),
 +            !mWebView.getSettings().getUseFixedViewport());
 +    }
 +
@@ -29096,7 +29096,7 @@ index 0000000..1d864e5
 +
 +        final WebSettings settings = mWebView.getSettings();
 +        final PackageManager pm = context.getPackageManager();
-+        mSupportMultiTouch = 
++        mSupportMultiTouch =
 +                (pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN_MULTITOUCH)
 +                 || pm.hasSystemFeature(PackageManager.FEATURE_FAKETOUCH_MULTITOUCH_DISTINCT))
 +                && settings.supportZoom() && settings.getBuiltInZoomControls();
@@ -29710,6 +29710,6 @@ index 467da25..d161bc1 100644
  android.widget.AbsListView
  android.widget.AbsListView$1
  android.widget.AbsListView$AdapterDataSetObserver
--- 
+--
 1.8.5.1
 

@@ -328,7 +328,7 @@ int wifi_load_driver()
         if (property_get(DRIVER_PROP_NAME, driver_status, NULL)) {
             if (strcmp(driver_status, "ok") == 0)
                 return 0;
-            else if (strcmp(DRIVER_PROP_NAME, "failed") == 0) {
+            else if (strcmp(driver_status, "failed") == 0) {
                 wifi_unload_driver();
                 return -1;
             }
@@ -851,7 +851,7 @@ int wifi_start_supplicant(int p2p_supported)
     /* The ar6k driver needs the interface up in order to scan! */
     if (!strncmp(DRIVER_MODULE_NAME, "ar6000", 6)) {
         ifc_init();
-        ifc_up("eth0");
+        ifc_up("wlan0");
         sleep(2);
     }
 #endif
@@ -904,6 +904,13 @@ int wifi_stop_supplicant(int p2p_supported)
         && strcmp(supp_status, "stopped") == 0) {
         return 0;
     }
+
+#ifdef USES_TI_MAC80211
+    if (p2p_supported && add_remove_p2p_interface(0) < 0) {
+        ALOGE("Wi-Fi - could not remove p2p interface");
+        return -1;
+    }
+#endif
 
     property_set("ctl.stop", supplicant_name);
     sched_yield();
@@ -1051,9 +1058,9 @@ int wifi_wait_on_socket(char *buf, size_t buflen)
     /*
      * Events strings are in the format
      *
-     *     IFNAME=iface <N>CTRL-EVENT-XXX 
+     *     IFNAME=iface <N>CTRL-EVENT-XXX
      *        or
-     *     <N>CTRL-EVENT-XXX 
+     *     <N>CTRL-EVENT-XXX
      *
      * where N is the message level in numerical form (0=VERBOSE, 1=DEBUG,
      * etc.) and XXX is the event name. The level information is not useful

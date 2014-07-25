@@ -43,6 +43,7 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
 TARGET_ARCH_LOWMEM := true
+TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 
 # Qualcomm hardware
 BOARD_USES_QCOM_HARDWARE := true
@@ -53,8 +54,8 @@ TARGET_USES_QCOM_BSP := true
 BOARD_WANTS_EMMC_BOOT := true
 
 # Compiler flags
-TARGET_GLOBAL_CFLAGS += -mfloat-abi=softfp -mfpu=neon -mtune=cortex-a5
-TARGET_GLOBAL_CPPFLAGS += -mfloat-abi=softfp -mfpu=neon -mtune=cortex-a5
+TARGET_GLOBAL_CFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=softfp
 
 # Audio
 BOARD_USES_LEGACY_ALSA_AUDIO := true
@@ -94,14 +95,6 @@ TARGET_PROVIDES_LIBLIGHTS := true
 # Media
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 TARGET_QCOM_MEDIA_VARIANT := caf
-
-# Partitions
-BOARD_BOOTIMAGE_PARTITION_SIZE := 0x800000
-BOARD_CACHEIMAGE_PARTITION_SIZE := 201326592 # 0xC000000
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x1400000
-
-BOARD_FLASH_BLOCK_SIZE := 131072
-TARGET_USERIMAGES_USE_EXT4 := true
 
 # Recovery
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/huawei/msm7x27a-common/recovery/recovery-keys.c
